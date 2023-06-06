@@ -8,22 +8,29 @@ package solution
 // fmt.Println("this is a debug message")
 
 func Solution(N int, A []int) []int {
-    list := make([]int, N)
-    max_counter := 0
-    add_last := 0
-    for _, value := range A{
-        if value>=1 && value<=N{
-            list[value-1] += 1
-            if max_counter<list[value-1]{
-                max_counter = list[value-1]
+    counters := make([]int, N)
+    maxCounter := 0
+    currentMax := 0
+    
+    for _, value := range A {
+        if value >= 1 && value <= N {
+            if counters[value-1] < maxCounter {
+                counters[value-1] = maxCounter
             }
-        }else{
-            add_last += max_counter
-            list = make([]int, N)
+            counters[value-1]++
+            if counters[value-1] > currentMax {
+                currentMax = counters[value-1]
+            }
+        } else if value == N+1 {
+            maxCounter = currentMax
         }
     }
-    for index, _ := range list{
-        list[index] += add_last
+    
+    for i := 0; i < N; i++ {
+        if counters[i] < maxCounter {
+            counters[i] = maxCounter
+        }
     }
-    return list
+    
+    return counters
 }
